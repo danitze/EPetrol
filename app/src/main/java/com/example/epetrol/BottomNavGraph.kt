@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.epetrol.screens.FavoritesScreen
 import com.example.epetrol.screens.ListScreen
-import com.example.epetrol.screens.MapScreen
+import com.example.epetrol.screens.TempMapScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
@@ -19,7 +19,7 @@ fun BottomNavGraph(navController: NavHostController) {
         }
 
         composable(BottomBarScreen.Map.route) {
-            MapScreen()
+            TempMapScreen()
         }
         composable(BottomBarScreen.List.route) {
             ListScreen()
