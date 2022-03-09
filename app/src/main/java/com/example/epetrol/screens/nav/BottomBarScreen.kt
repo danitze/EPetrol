@@ -1,4 +1,4 @@
-package com.example.epetrol
+package com.example.epetrol.screens.nav
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite

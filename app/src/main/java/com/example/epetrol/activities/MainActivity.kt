@@ -1,15 +1,18 @@
-package com.example.epetrol
+package com.example.epetrol.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.epetrol.screens.MainScreen
+import com.example.epetrol.viewmodels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
@@ -33,18 +36,15 @@ class MainActivity : AppCompatActivity() {
                         setContent {
                             MainScreen()
                         }
-                        Log.d("MyTag", "$mainViewModel")
                     } else {
                         finish()
                     }
                 }
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         } else {
-
             setContent {
                 MainScreen()
             }
-            Log.d("MyTag", "$mainViewModel")
         }
 
     }

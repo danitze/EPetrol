@@ -1,4 +1,4 @@
-package com.example.epetrol
+package com.example.epetrol.screens
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
@@ -9,6 +9,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.epetrol.screens.nav.BottomNavGraph
+import com.example.epetrol.screens.nav.BottomBarScreen
 
 @Composable
 fun MainScreen() {
