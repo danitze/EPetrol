@@ -1,5 +1,6 @@
 package com.example.epetrol.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -43,7 +44,8 @@ fun GasStationCard(station: Pair<String, List<FuelInfo>>) {
         shape = MaterialTheme.shapes.medium,
         elevation = 1.dp,
         color = MaterialTheme.colors.surface,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        border = BorderStroke(2.dp, MaterialTheme.colors.primaryVariant),
     ) {
         Column(modifier = Modifier.padding(5.dp)) {
             Row(
@@ -81,20 +83,24 @@ fun FuelTypePricing(fuelInfo: FuelInfo) {
         safeLet(fuelType, price) { type, price ->
             Row {
                 Column(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(2f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = type,
                         color = MaterialTheme.colors.secondary,
                         style = MaterialTheme.typography.subtitle2,
-                        fontSize = 25.sp
+                        fontSize = 30.sp
                     )
                 }
-                Column(modifier = Modifier.weight(4f)) {
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Column(modifier = Modifier.weight(5f)) {
                     Text(
                         text = formPriceText(price),
-                        fontSize = 30.sp
+                        color = MaterialTheme.colors.primaryVariant,
+                        fontSize = 25.sp
                     )
                 }
             }
