@@ -3,19 +3,16 @@ package com.example.epetrol.activities
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.epetrol.activities.ui.theme.EPetrolTheme
 import com.example.epetrol.screens.MainScreen
-import com.example.epetrol.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    private val mainViewModel: MainViewModel by viewModels()
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +31,9 @@ class MainActivity : AppCompatActivity() {
                 ) { isGranted: Boolean ->
                     if (isGranted) {
                         setContent {
-                            MainScreen()
+                            EPetrolTheme {
+                                MainScreen()
+                            }
                         }
                     } else {
                         finish()
@@ -43,10 +42,10 @@ class MainActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         } else {
             setContent {
-                MainScreen()
+                EPetrolTheme {
+                    MainScreen()
+                }
             }
         }
-
     }
-
 }

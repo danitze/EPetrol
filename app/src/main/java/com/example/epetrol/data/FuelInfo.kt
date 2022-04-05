@@ -2,7 +2,7 @@ package com.example.epetrol.data
 
 import com.google.gson.annotations.SerializedName
 
-data class StationInfo(
+data class FuelInfo(
     @SerializedName("region")
     val region: String? = null,
     @SerializedName("fuelType")

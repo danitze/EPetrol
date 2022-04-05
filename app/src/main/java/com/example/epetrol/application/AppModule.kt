@@ -1,6 +1,6 @@
 package com.example.epetrol.application
 
-import com.example.epetrol.services.GasStationsInfoService
+import com.example.epetrol.services.FuelInfoService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,9 +13,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    //TODO
     @Provides
-    fun provideBaseUrl() = "https://example-hilt-retrofit-default-rtdb.firebaseio.com/"
+    fun provideBaseUrl() = "https://e-petrol-api-gateway.herokuapp.com/"
 
     @Singleton
     @Provides
@@ -26,7 +25,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideGasStationsInfoService(retrofit: Retrofit): GasStationsInfoService = retrofit
-        .create(GasStationsInfoService::class.java)
+    fun provideFuelInfoService(retrofit: Retrofit): FuelInfoService = retrofit
+        .create(FuelInfoService::class.java)
 
 }

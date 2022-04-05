@@ -1,11 +1,11 @@
 package com.example.epetrol.repo
 
-import com.example.epetrol.services.GasStationsInfoService
+import com.example.epetrol.services.FuelInfoService
 import javax.inject.Inject
 
 class GeoRepo @Inject constructor(
-    private val gasStationsInfoService: GasStationsInfoService
+    private val gasStationsInfoService: FuelInfoService
 ) {
-    suspend fun getGasStationsInfo(region: String) = gasStationsInfoService
-        .getRegionalStations(region)
+    suspend fun getFuelInfo(region: String) = gasStationsInfoService
+        .getFuelInfo(region)
 }
