@@ -6,13 +6,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,8 +59,8 @@ fun GasStationCard(station: GasStation) {
                     painter = painterResource(id = getPainterId(station.gasStationId)),
                     contentDescription = "Logo",
                     modifier = Modifier
-                        .width(100.dp)
                         .border(1.dp, MaterialTheme.colors.primary)
+                        .weight(3f),
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))
@@ -68,8 +69,24 @@ fun GasStationCard(station: GasStation) {
                     text = station.gasStationName,
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.subtitle1,
-                    fontSize = 40.sp
+                    fontSize = 30.sp,
+                    modifier = Modifier.weight(6f),
                 )
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                var inWishList by remember { mutableStateOf(false) }
+
+                IconButton(
+                    onClick = { inWishList = !inWishList },
+                    modifier = Modifier.weight(2f),
+                ) {
+                    Icon(
+                        imageVector = if (inWishList) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "heart",
+                        tint = Color.Red,
+                    )
+                }
             }
             station.fuelList.forEach { fuel ->
                 FuelTypePricing(fuel = fuel)
@@ -84,14 +101,15 @@ fun FuelTypePricing(fuel: Fuel) {
         safeLet(fuelType, price) { type, price ->
             Row {
                 Column(
-                    modifier = Modifier.weight(2f)
+                    modifier = Modifier
+                        .weight(2f)
                         .padding(start = 5.dp),
                 ) {
                     Text(
                         text = type,
                         color = MaterialTheme.colors.secondary,
                         style = MaterialTheme.typography.subtitle2,
-                        fontSize = 30.sp
+                        fontSize = 25.sp
                     )
                 }
 
@@ -101,7 +119,7 @@ fun FuelTypePricing(fuel: Fuel) {
                     Text(
                         text = formPriceText(price),
                         color = MaterialTheme.colors.primaryVariant,
-                        fontSize = 25.sp
+                        fontSize = 23.sp
                     )
                 }
             }
