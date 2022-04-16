@@ -17,7 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.epetrol.data.FuelInfo
+import com.example.epetrol.data.Fuel
+import com.example.epetrol.data.GasStation
 import com.example.epetrol.formPriceText
 import com.example.epetrol.getPainterId
 import com.example.epetrol.safeLet
@@ -25,12 +26,12 @@ import com.example.epetrol.viewmodels.MainViewModel
 
 @Composable
 fun ListScreen(viewModel: MainViewModel = hiltViewModel()) {
-    val stationsMapState = viewModel.stationsFlow.collectAsState(mapOf())
-    GasStationsCard(stations = stationsMapState.value.toList())
+    val gasStationsState = viewModel.gasStationsFlow.collectAsState(listOf())
+    GasStationsCard(stations = gasStationsState.value)
 }
 
 @Composable
-fun GasStationsCard(stations: List<Pair<String, List<FuelInfo>>>) {
+fun GasStationsCard(stations: List<GasStation>) {
     LazyColumn {
         items(stations) { station ->
             GasStationCard(station = station)
@@ -39,7 +40,7 @@ fun GasStationsCard(stations: List<Pair<String, List<FuelInfo>>>) {
 }
 
 @Composable
-fun GasStationCard(station: Pair<String, List<FuelInfo>>) {
+fun GasStationCard(station: GasStation) {
     Surface(
         shape = MaterialTheme.shapes.medium,
         elevation = 1.dp,
@@ -54,7 +55,7 @@ fun GasStationCard(station: Pair<String, List<FuelInfo>>) {
             ) {
 
                 Image(
-                    painter = painterResource(id = getPainterId(station.first)),
+                    painter = painterResource(id = getPainterId(station.gasStationId)),
                     contentDescription = "Logo",
                     modifier = Modifier
                         .width(100.dp)
@@ -64,27 +65,27 @@ fun GasStationCard(station: Pair<String, List<FuelInfo>>) {
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Text(
-                    text = station.first,
+                    text = station.gasStationName,
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.subtitle1,
                     fontSize = 40.sp
                 )
             }
-            station.second.forEach { fuelInfo ->
-                FuelTypePricing(fuelInfo = fuelInfo)
+            station.fuelList.forEach { fuel ->
+                FuelTypePricing(fuel = fuel)
             }
         }
     }
 }
 
 @Composable
-fun FuelTypePricing(fuelInfo: FuelInfo) {
-    with(fuelInfo) {
+fun FuelTypePricing(fuel: Fuel) {
+    with(fuel) {
         safeLet(fuelType, price) { type, price ->
             Row {
                 Column(
-                    modifier = Modifier.weight(2f),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.weight(2f)
+                        .padding(start = 5.dp),
                 ) {
                     Text(
                         text = type,

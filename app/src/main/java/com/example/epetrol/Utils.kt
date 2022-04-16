@@ -6,8 +6,4 @@ inline fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T
 
 fun formPriceText(price: Double): String = "$price UAH"
 
-fun getPainterId(stationName: String): Int = when(stationName) {
-    "ОККО" -> R.drawable.ic_okko_logo
-    "WOG" -> R.drawable.ic_wog_logo
-    else -> R.drawable.ic_placeholder
-}
+fun getPainterId(stationName: String): Int = R.drawable.ic_placeholder

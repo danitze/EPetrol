@@ -23,10 +23,8 @@ class MainViewModel @Inject constructor(
         geoService.getAdminArea(coordinates) ?: geoService.getSubAdminArea(coordinates)
     }
 
-    val stationsFlow = adminAreaFlow.filterNotNull().map { adminArea ->
-        geoRepo.getFuelInfo(adminArea).body()?.let { fuelInfoList ->
-            fuelInfoList.filter { it.gasStation != null }.groupBy { it.gasStation!! }
-        } ?: mapOf()
+    val gasStationsFlow = adminAreaFlow.filterNotNull().map { adminArea ->
+        geoRepo.getGasStations(adminArea).body() ?: listOf()
     }
 
     init {

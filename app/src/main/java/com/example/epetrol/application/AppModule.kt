@@ -1,6 +1,6 @@
 package com.example.epetrol.application
 
-import com.example.epetrol.services.FuelInfoService
+import com.example.epetrol.services.GasStationsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFuelInfoService(retrofit: Retrofit): FuelInfoService = retrofit
-        .create(FuelInfoService::class.java)
+    fun provideFuelInfoService(retrofit: Retrofit): GasStationsService = retrofit
+        .create(GasStationsService::class.java)
 
 }
