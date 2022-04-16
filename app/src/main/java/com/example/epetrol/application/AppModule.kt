@@ -1,9 +1,14 @@
 package com.example.epetrol.application
 
+import android.content.Context
+import androidx.room.Room
+import com.example.epetrol.room.FavouriteGasStationsDao
+import com.example.epetrol.room.FavouriteGasStationsDb
 import com.example.epetrol.services.GasStationsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,5 +32,20 @@ object AppModule {
     @Provides
     fun provideFuelInfoService(retrofit: Retrofit): GasStationsService = retrofit
         .create(GasStationsService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFavouriteGasStationsDb(
+        @ApplicationContext appContext: Context
+    ): FavouriteGasStationsDb = Room.databaseBuilder(
+        appContext,
+        FavouriteGasStationsDb::class.java,
+        "favourite_gas_stations_db"
+    ).build()
+
+    @Singleton
+    @Provides
+    fun provideFavouriteGasStationsDao(db: FavouriteGasStationsDb): FavouriteGasStationsDao =
+        db.favouriteGasStationsDao()
 
 }

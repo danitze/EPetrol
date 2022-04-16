@@ -99,6 +99,10 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    //Room
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }
 
 kapt {

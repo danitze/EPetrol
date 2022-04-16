@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.data.Coordinates
-import com.example.epetrol.repo.GeoRepo
-import com.example.epetrol.services.GeoService
+import com.example.epetrol.repo.AppRepo
+import com.example.epetrol.room.FavouriteGasStation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -15,17 +15,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val geoService: GeoService,
-    private val geoRepo: GeoRepo
+    private val appRepo: AppRepo
 ) : ViewModel() {
     private val coordinatesFlow = MutableStateFlow<Coordinates?>(null)
     private val adminAreaFlow = coordinatesFlow.filterNotNull().map { coordinates ->
-        geoService.getAdminArea(coordinates) ?: geoService.getSubAdminArea(coordinates)
+        appRepo.getAdminArea(coordinates)
     }
 
     val gasStationsFlow = adminAreaFlow.filterNotNull().map { adminArea ->
-        geoRepo.getGasStations(adminArea).body() ?: listOf()
+        appRepo.getGasStations(adminArea).body() ?: listOf()
     }
+
+    val favouriteGasStationsFlow = appRepo.favouriteGasStationsFlow
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
@@ -35,7 +36,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun reload() = viewModelScope.launch(Dispatchers.Default) {
-        geoService.getLastLocation().addOnSuccessListener { location: Location? ->
+        appRepo.getLastLocation().addOnSuccessListener { location: Location? ->
             /*coordinatesFlow.value =
                 safeLet(location?.latitude, location?.longitude) { lat, lng ->
                     Coordinates(lat, lng)
@@ -44,6 +45,14 @@ class MainViewModel @Inject constructor(
             coordinatesFlow.value = Coordinates(50.45466, 30.5252)
         }.addOnFailureListener {
             Log.d("MyTag", "Fails with ${it.localizedMessage}")
+        }
+    }
+
+    fun changeGasStationFavouriteState(gasStation: FavouriteGasStation) = viewModelScope.launch {
+        if(appRepo.isGasStationFavourite(gasStation)) {
+            appRepo.removeGasStationFromFavourites(gasStation)
+        } else {
+            appRepo.addGasStationToFavourites(gasStation)
         }
     }
 }

@@ -10,7 +10,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,25 +24,30 @@ import com.example.epetrol.data.GasStation
 import com.example.epetrol.formPriceText
 import com.example.epetrol.getPainterId
 import com.example.epetrol.safeLet
+import com.example.epetrol.toFavouriteGasStation
 import com.example.epetrol.viewmodels.MainViewModel
 
 @Composable
 fun ListScreen(viewModel: MainViewModel = hiltViewModel()) {
     val gasStationsState = viewModel.gasStationsFlow.collectAsState(listOf())
-    GasStationsCard(stations = gasStationsState.value)
+    GasStationsCard(stations = gasStationsState.value, viewModel = viewModel)
 }
 
 @Composable
-fun GasStationsCard(stations: List<GasStation>) {
+fun GasStationsCard(stations: List<GasStation>, viewModel: MainViewModel) {
     LazyColumn {
         items(stations) { station ->
-            GasStationCard(station = station)
+            GasStationCard(station = station, viewModel = viewModel)
         }
     }
 }
 
 @Composable
-fun GasStationCard(station: GasStation) {
+fun GasStationCard(station: GasStation, viewModel: MainViewModel) {
+
+    val favouriteGasStationsState = viewModel
+        .favouriteGasStationsFlow.collectAsState(initial = listOf())
+
     Surface(
         shape = MaterialTheme.shapes.medium,
         elevation = 1.dp,
@@ -75,14 +81,20 @@ fun GasStationCard(station: GasStation) {
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                var inWishList by remember { mutableStateOf(false) }
-
                 IconButton(
-                    onClick = { inWishList = !inWishList },
+                    onClick = {
+                        viewModel.changeGasStationFavouriteState(station.toFavouriteGasStation())
+                    },
                     modifier = Modifier.weight(2f),
                 ) {
                     Icon(
-                        imageVector = if (inWishList) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (favouriteGasStationsState.value.contains(
+                                station.toFavouriteGasStation()
+                            )
+                        )
+                            Icons.Outlined.Favorite
+                        else
+                            Icons.Outlined.FavoriteBorder,
                         contentDescription = "heart",
                         tint = Color.Red,
                     )
