@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.epetrol.room.FavouriteGasStationsDao
 import com.example.epetrol.room.FavouriteGasStationsDb
-import com.example.epetrol.services.GasStationsService
+import com.example.epetrol.services.RegionGasStationsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,8 +30,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFuelInfoService(retrofit: Retrofit): GasStationsService = retrofit
-        .create(GasStationsService::class.java)
+    fun provideRegionGasStationsService(retrofit: Retrofit): RegionGasStationsService = retrofit
+        .create(RegionGasStationsService::class.java)
 
     @Singleton
     @Provides

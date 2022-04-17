@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavouriteGasStationsDao {
     @Insert
-    suspend fun insert(gasStation: FavouriteGasStation)
+    suspend fun insert(gasStation: GasStation)
 
     @Delete
-    suspend fun delete(gasStation: FavouriteGasStation)
+    suspend fun delete(gasStation: GasStation)
 
     @Query("SELECT * FROM favourite_gas_station")
-    fun getFavouriteStations(): Flow<List<FavouriteGasStation>>
+    fun getFavouriteStations(): Flow<List<GasStation>>
 
     @Query("SELECT COUNT(*) FROM favourite_gas_station where station_id = :gasStationId")
     suspend fun isGasStationFavourite(gasStationId: String): Int

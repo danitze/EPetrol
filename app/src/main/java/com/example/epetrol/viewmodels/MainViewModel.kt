@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.data.Coordinates
 import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.room.FavouriteGasStation
+import com.example.epetrol.room.GasStation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun changeGasStationFavouriteState(gasStation: FavouriteGasStation) = viewModelScope.launch {
+    fun changeGasStationFavouriteState(gasStation: GasStation) = viewModelScope.launch {
         if(appRepo.isGasStationFavourite(gasStation)) {
             appRepo.removeGasStationFromFavourites(gasStation)
         } else {

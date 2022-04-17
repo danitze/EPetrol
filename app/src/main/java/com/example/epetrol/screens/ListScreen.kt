@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.epetrol.data.Fuel
-import com.example.epetrol.data.GasStation
+import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.formPriceText
 import com.example.epetrol.getPainterId
 import com.example.epetrol.safeLet
-import com.example.epetrol.toFavouriteGasStation
+import com.example.epetrol.toGasStation
 import com.example.epetrol.viewmodels.MainViewModel
 
 @Composable
@@ -34,7 +34,7 @@ fun ListScreen(viewModel: MainViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun GasStationsCard(stations: List<GasStation>, viewModel: MainViewModel) {
+fun GasStationsCard(stations: List<RegionGasStation>, viewModel: MainViewModel) {
     LazyColumn {
         items(stations) { station ->
             GasStationCard(station = station, viewModel = viewModel)
@@ -43,7 +43,7 @@ fun GasStationsCard(stations: List<GasStation>, viewModel: MainViewModel) {
 }
 
 @Composable
-fun GasStationCard(station: GasStation, viewModel: MainViewModel) {
+fun GasStationCard(station: RegionGasStation, viewModel: MainViewModel) {
 
     val favouriteGasStationsState = viewModel
         .favouriteGasStationsFlow.collectAsState(initial = listOf())
@@ -83,13 +83,13 @@ fun GasStationCard(station: GasStation, viewModel: MainViewModel) {
 
                 IconButton(
                     onClick = {
-                        viewModel.changeGasStationFavouriteState(station.toFavouriteGasStation())
+                        viewModel.changeGasStationFavouriteState(station.toGasStation())
                     },
                     modifier = Modifier.weight(2f),
                 ) {
                     Icon(
                         imageVector = if (favouriteGasStationsState.value.contains(
-                                station.toFavouriteGasStation()
+                                station.toGasStation()
                             )
                         )
                             Icons.Outlined.Favorite

@@ -2,15 +2,15 @@ package com.example.epetrol.repo
 
 import android.location.Location
 import com.example.epetrol.data.Coordinates
-import com.example.epetrol.room.FavouriteGasStation
-import com.example.epetrol.services.GasStationsService
+import com.example.epetrol.room.GasStation
+import com.example.epetrol.services.RegionGasStationsService
 import com.example.epetrol.services.GeoService
 import com.example.epetrol.services.RoomService
 import com.google.android.gms.tasks.Task
 import javax.inject.Inject
 
 class AppRepo @Inject constructor(
-    private val gasStationsService: GasStationsService,
+    private val gasStationsService: RegionGasStationsService,
     private val geoService: GeoService,
     private val roomService: RoomService,
 ) {
@@ -19,13 +19,13 @@ class AppRepo @Inject constructor(
     suspend fun getGasStations(region: String) = gasStationsService
         .getGasStations(region)
 
-    suspend fun addGasStationToFavourites(gasStation: FavouriteGasStation) =
+    suspend fun addGasStationToFavourites(gasStation: GasStation) =
         roomService.addGasStationToFavourites(gasStation)
 
-    suspend fun removeGasStationFromFavourites(gasStation: FavouriteGasStation) =
+    suspend fun removeGasStationFromFavourites(gasStation: GasStation) =
         roomService.removeGasStationFromFavourites(gasStation)
 
-    suspend fun isGasStationFavourite(gasStation: FavouriteGasStation): Boolean =
+    suspend fun isGasStationFavourite(gasStation: GasStation): Boolean =
         roomService.isGasStationFavourite(gasStation)
 
     fun getLastLocation(): Task<Location> = geoService.getLastLocation()
