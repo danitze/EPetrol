@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -31,29 +32,37 @@ fun FavouritesScreen(viewModel: MainViewModel = hiltViewModel()) {
     val favouriteGasStationsState = viewModel.favouriteGasStationsFlow
         .collectAsState(initial = listOf())
     if(favouriteGasStationsState.value.isNotEmpty()) {
-        FavouriteGasStationsCard(viewModel = viewModel)
+        FavouriteGasStationsCard(
+            viewModel = viewModel,
+            favouriteGasStationsState = favouriteGasStationsState
+        )
     } else {
         EmptyListCard()
     }
 }
 
 @Composable
-fun FavouriteGasStationsCard(viewModel: MainViewModel) {
-    val favouriteGasStationsState = viewModel.favouriteGasStationsFlow
-        .collectAsState(initial = listOf())
+fun FavouriteGasStationsCard(
+    viewModel: MainViewModel,
+    favouriteGasStationsState: State<List<GasStation>>
+) {
     LazyColumn {
         items(favouriteGasStationsState.value) { station ->
-            FavouriteGasStationCard(station = station, viewModel = viewModel)
+            FavouriteGasStationCard(
+                station = station,
+                viewModel = viewModel,
+                favouriteGasStationsState = favouriteGasStationsState
+            )
         }
     }
 }
 
 @Composable
-fun FavouriteGasStationCard(station: GasStation, viewModel: MainViewModel) {
-
-    val favouriteGasStationsState = viewModel.favouriteGasStationsFlow
-        .collectAsState(initial = listOf())
-
+fun FavouriteGasStationCard(
+    station: GasStation,
+    viewModel: MainViewModel,
+    favouriteGasStationsState: State<List<GasStation>>
+) {
     Surface(
         shape = MaterialTheme.shapes.medium,
         elevation = 1.dp,
