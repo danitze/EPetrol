@@ -16,11 +16,11 @@ import com.example.epetrol.screens.nav.BottomNavGraph
 import com.example.epetrol.screens.nav.BottomBarScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(baseUrl: String) {
     val navController = rememberNavController()
     Scaffold(bottomBar = { BottomBar(navController = navController) }) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            BottomNavGraph(navController = navController)
+            BottomNavGraph(navController = navController, baseUrl = baseUrl)
         }
     }
 }

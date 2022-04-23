@@ -1,7 +1,6 @@
 package com.example.epetrol.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,22 +16,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.epetrol.getPainterId
+import com.example.epetrol.R
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.viewmodels.MainViewModel
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun FavouritesScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun FavouritesScreen(baseUrl: String, viewModel: MainViewModel = hiltViewModel()) {
     val favouriteGasStationsState = viewModel.favouriteGasStationsFlow
         .collectAsState(initial = listOf())
     if(favouriteGasStationsState.value.isNotEmpty()) {
         FavouriteGasStationsCard(
+            baseUrl = baseUrl,
             viewModel = viewModel,
             favouriteGasStationsState = favouriteGasStationsState
         )
@@ -43,13 +46,15 @@ fun FavouritesScreen(viewModel: MainViewModel = hiltViewModel()) {
 
 @Composable
 fun FavouriteGasStationsCard(
+    baseUrl: String,
     viewModel: MainViewModel,
     favouriteGasStationsState: State<List<GasStation>>
 ) {
     LazyColumn {
-        items(favouriteGasStationsState.value) { station ->
+        items(items = favouriteGasStationsState.value) { station ->
             FavouriteGasStationCard(
                 station = station,
+                baseUrl = baseUrl,
                 viewModel = viewModel,
                 favouriteGasStationsState = favouriteGasStationsState
             )
@@ -60,6 +65,7 @@ fun FavouriteGasStationsCard(
 @Composable
 fun FavouriteGasStationCard(
     station: GasStation,
+    baseUrl: String,
     viewModel: MainViewModel,
     favouriteGasStationsState: State<List<GasStation>>
 ) {
@@ -76,9 +82,11 @@ fun FavouriteGasStationCard(
                 .height(100.dp)
                 .padding(10.dp)
         ) {
-            Image(
-                painter = painterResource(id = getPainterId(station.gasStationId)),
+            GlideImage(
+                imageModel = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${station.gasStationId}",
                 contentDescription = "Logo",
+                contentScale = ContentScale.FillWidth,
+                placeHolder = ImageVector.vectorResource(id = R.drawable.ic_placeholder),
                 modifier = Modifier
                     .border(1.dp, MaterialTheme.colors.primary)
                     .weight(3f),
@@ -119,7 +127,8 @@ fun FavouriteGasStationCard(
 @Composable
 fun EmptyListCard() {
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(10.dp)
     ) {
 

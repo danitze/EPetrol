@@ -10,9 +10,12 @@ import androidx.core.app.ActivityCompat
 import com.example.epetrol.activities.ui.theme.EPetrolTheme
 import com.example.epetrol.screens.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var baseUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     if (isGranted) {
                         setContent {
                             EPetrolTheme {
-                                MainScreen()
+                                MainScreen(baseUrl = baseUrl)
                             }
                         }
                     } else {
@@ -43,7 +46,7 @@ class MainActivity : ComponentActivity() {
         } else {
             setContent {
                 EPetrolTheme {
-                    MainScreen()
+                    MainScreen(baseUrl = baseUrl)
                 }
             }
         }

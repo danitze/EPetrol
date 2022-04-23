@@ -9,20 +9,20 @@ import com.example.epetrol.screens.ListScreen
 import com.example.epetrol.screens.TempMapScreen
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(navController: NavHostController, baseUrl: String) {
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Map.route
     ) {
         composable(BottomBarScreen.Favorites.route) {
-            FavouritesScreen()
+            FavouritesScreen(baseUrl = baseUrl)
         }
 
         composable(BottomBarScreen.Map.route) {
             TempMapScreen()
         }
         composable(BottomBarScreen.List.route) {
-            ListScreen()
+            ListScreen(baseUrl = baseUrl)
         }
     }
 }
