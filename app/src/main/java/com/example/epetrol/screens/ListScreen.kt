@@ -24,7 +24,6 @@ import com.example.epetrol.R
 import com.example.epetrol.data.Fuel
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.formPriceText
-import com.example.epetrol.safeLet
 import com.example.epetrol.toGasStation
 import com.example.epetrol.viewmodels.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -103,7 +102,7 @@ fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainVi
                     )
                 }
             }
-            station.fuelList.forEach { fuel ->
+            station.fuelList.filter { it.price != 0.toDouble() }.forEach { fuel ->
                 FuelTypePricing(fuel = fuel)
             }
         }
@@ -113,30 +112,28 @@ fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainVi
 @Composable
 fun FuelTypePricing(fuel: Fuel) {
     with(fuel) {
-        safeLet(fuelType, price) { type, price ->
-            Row {
-                Column(
-                    modifier = Modifier
-                        .weight(2f)
-                        .padding(start = 5.dp),
-                ) {
-                    Text(
-                        text = type,
-                        color = MaterialTheme.colors.secondary,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 25.sp
-                    )
-                }
+        Row {
+            Column(
+                modifier = Modifier
+                    .weight(2f)
+                    .padding(start = 5.dp),
+            ) {
+                Text(
+                    text = fuelType,
+                    color = MaterialTheme.colors.secondary,
+                    style = MaterialTheme.typography.subtitle2,
+                    fontSize = 25.sp
+                )
+            }
 
-                Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-                Column(modifier = Modifier.weight(5f)) {
-                    Text(
-                        text = formPriceText(price),
-                        color = MaterialTheme.colors.primaryVariant,
-                        fontSize = 23.sp
-                    )
-                }
+            Column(modifier = Modifier.weight(5f)) {
+                Text(
+                    text = formPriceText(price),
+                    color = MaterialTheme.colors.primaryVariant,
+                    fontSize = 20.sp
+                )
             }
         }
     }

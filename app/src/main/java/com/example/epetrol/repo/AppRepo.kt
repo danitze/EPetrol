@@ -3,6 +3,7 @@ package com.example.epetrol.repo
 import android.location.Location
 import com.example.epetrol.data.Coordinates
 import com.example.epetrol.room.GasStation
+import com.example.epetrol.services.GasStationInfoService
 import com.example.epetrol.services.RegionGasStationsService
 import com.example.epetrol.services.GeoService
 import com.example.epetrol.services.RoomService
@@ -11,6 +12,7 @@ import javax.inject.Inject
 
 class AppRepo @Inject constructor(
     private val gasStationsService: RegionGasStationsService,
+    private val gasStationInfoService: GasStationInfoService,
     private val geoService: GeoService,
     private val roomService: RoomService,
 ) {
@@ -18,6 +20,9 @@ class AppRepo @Inject constructor(
 
     suspend fun getGasStations(region: String) = gasStationsService
         .getGasStations(region)
+
+    suspend fun getGasStationInfo(gasStationId: String) = gasStationInfoService
+        .getGasStationInfo(gasStationId)
 
     suspend fun addGasStationToFavourites(gasStation: GasStation) =
         roomService.addGasStationToFavourites(gasStation)

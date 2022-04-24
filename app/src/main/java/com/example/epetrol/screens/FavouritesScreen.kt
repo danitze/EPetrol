@@ -1,5 +1,6 @@
 package com.example.epetrol.screens
 
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -18,13 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.epetrol.GAS_STATION_ID_KEY
 import com.example.epetrol.R
+import com.example.epetrol.activities.GasStationInfoActivity
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.viewmodels.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -62,6 +66,7 @@ fun FavouriteGasStationsCard(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavouriteGasStationCard(
     station: GasStation,
@@ -69,12 +74,21 @@ fun FavouriteGasStationCard(
     viewModel: MainViewModel,
     favouriteGasStationsState: State<List<GasStation>>
 ) {
+
+    val context = LocalContext.current
+
     Surface(
         shape = MaterialTheme.shapes.medium,
         elevation = 1.dp,
         color = MaterialTheme.colors.surface,
         modifier = Modifier.padding(5.dp),
         border = BorderStroke(2.dp, MaterialTheme.colors.primaryVariant),
+        onClick = {
+            val intent = Intent(context, GasStationInfoActivity::class.java).apply {
+                putExtra(GAS_STATION_ID_KEY, station.gasStationId)
+            }
+            context.startActivity(intent)
+        },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

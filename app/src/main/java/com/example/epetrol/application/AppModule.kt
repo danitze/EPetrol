@@ -1,9 +1,11 @@
 package com.example.epetrol.application
 
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.example.epetrol.room.FavouriteGasStationsDao
 import com.example.epetrol.room.FavouriteGasStationsDb
+import com.example.epetrol.services.GasStationInfoService
 import com.example.epetrol.services.RegionGasStationsService
 import dagger.Module
 import dagger.Provides
@@ -32,6 +34,11 @@ object AppModule {
     @Provides
     fun provideRegionGasStationsService(retrofit: Retrofit): RegionGasStationsService = retrofit
         .create(RegionGasStationsService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideGasStationInfoService(retrofit: Retrofit): GasStationInfoService = retrofit
+        .create(GasStationInfoService::class.java)
 
     @Singleton
     @Provides

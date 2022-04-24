@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appRepo: AppRepo
+    private val appRepo: AppRepo,
 ) : ViewModel() {
     private val coordinatesFlow = MutableStateFlow<Coordinates?>(null)
     private val adminAreaFlow = coordinatesFlow.filterNotNull().map { coordinates ->
@@ -32,7 +32,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             reload()
         }
-
     }
 
     private fun reload() = viewModelScope.launch(Dispatchers.Default) {
