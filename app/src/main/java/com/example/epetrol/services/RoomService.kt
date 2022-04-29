@@ -3,7 +3,9 @@ package com.example.epetrol.services
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.room.FavouriteGasStationsDao
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RoomService @Inject constructor(
     private val favouriteGasStationsDao: FavouriteGasStationsDao
 ) {

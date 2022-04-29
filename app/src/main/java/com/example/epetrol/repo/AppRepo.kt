@@ -9,7 +9,9 @@ import com.example.epetrol.services.GeoService
 import com.example.epetrol.services.RoomService
 import com.google.android.gms.tasks.Task
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AppRepo @Inject constructor(
     private val gasStationsService: RegionGasStationsService,
     private val gasStationInfoService: GasStationInfoService,
