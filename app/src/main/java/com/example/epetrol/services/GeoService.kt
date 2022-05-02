@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import com.example.epetrol.data.Coordinates
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -14,13 +15,10 @@ import javax.inject.Singleton
 
 @SuppressLint("MissingPermission")
 @Singleton
-class GeoService @Inject constructor(@ApplicationContext context: Context) {
-    private val fusedLocationClient by lazy {
-        LocationServices.getFusedLocationProviderClient(context)
-    }
-
-    private val geoCoder by lazy { Geocoder(context, Locale.getDefault()) }
-
+class GeoService @Inject constructor(
+    private val fusedLocationClient: FusedLocationProviderClient,
+    private val geoCoder: Geocoder
+) {
 
     fun getLastLocation(): Task<Location> = fusedLocationClient.lastLocation
 
