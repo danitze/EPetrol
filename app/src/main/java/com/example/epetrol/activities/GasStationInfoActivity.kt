@@ -103,7 +103,7 @@ class GasStationInfoActivity : ComponentActivity() {
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column {
-                        if(gasStationInfo.email != "null") {
+                        if(gasStationInfo.email?.let { it != "null" } == true) {
                             Text(
                                 "email: ",
                                 color = Color.White,
@@ -111,7 +111,7 @@ class GasStationInfoActivity : ComponentActivity() {
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
-                        if(gasStationInfo.phoneNumber != "null") {
+                        if(gasStationInfo.phoneNumber?.let { it != "null" } == true) {
                             Text(
                                 "tel.: ",
                                 color = Color.White,
@@ -120,7 +120,7 @@ class GasStationInfoActivity : ComponentActivity() {
                         }
                     }
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        if(gasStationInfo.email != "null") {
+                        if(gasStationInfo.email?.let { it != "null" } == true) {
                             Text(
                                 gasStationInfo.email,
                                 color = MaterialTheme.colors.secondary,
@@ -139,7 +139,7 @@ class GasStationInfoActivity : ComponentActivity() {
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
-                        if(gasStationInfo.phoneNumber != "null") {
+                        if(gasStationInfo.phoneNumber?.let { it != "null" } == true) {
                             Text(
                                 text = gasStationInfo.phoneNumber,
                                 color = MaterialTheme.colors.secondary,

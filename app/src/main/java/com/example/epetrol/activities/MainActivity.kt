@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         finish()
                     }
                 }
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             setContent {
                 EPetrolTheme {

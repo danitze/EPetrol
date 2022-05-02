@@ -10,10 +10,10 @@ data class GasStationInfo(
     val gasStationName: String = "",
 
     @SerializedName("email")
-    val email: String = "",
+    val email: String? = "",
 
     @SerializedName("phoneNumber")
-    val phoneNumber: String = "",
+    val phoneNumber: String? = "",
 
     @SerializedName("averagePriceList")
     val averageFuelPrices: List<Fuel> = listOf()
