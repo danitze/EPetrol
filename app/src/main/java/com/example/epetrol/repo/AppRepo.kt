@@ -2,41 +2,27 @@ package com.example.epetrol.repo
 
 import android.location.Location
 import com.example.epetrol.data.Coordinates
+import com.example.epetrol.data.GasStationInfo
+import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.room.GasStation
-import com.example.epetrol.services.GasStationInfoService
-import com.example.epetrol.services.RegionGasStationsService
-import com.example.epetrol.services.GeoService
-import com.example.epetrol.services.RoomService
 import com.google.android.gms.tasks.Task
-import javax.inject.Inject
-import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 
-@Singleton
-class AppRepo @Inject constructor(
-    private val gasStationsService: RegionGasStationsService,
-    private val gasStationInfoService: GasStationInfoService,
-    private val geoService: GeoService,
-    private val roomService: RoomService,
-) {
-    val favouriteGasStationsFlow = roomService.favouriteGasStationsFlow
+interface AppRepo {
+    val favouriteGasStationsFlow: Flow<List<GasStation>>
 
-    suspend fun getGasStations(region: String) = gasStationsService
-        .getGasStations(region)
+    suspend fun getGasStations(region: String): Response<List<RegionGasStation>>
 
-    suspend fun getGasStationInfo(gasStationId: String) = gasStationInfoService
-        .getGasStationInfo(gasStationId)
+    suspend fun getGasStationInfo(gasStationId: String): Response<GasStationInfo>
 
-    suspend fun addGasStationToFavourites(gasStation: GasStation) =
-        roomService.addGasStationToFavourites(gasStation)
+    suspend fun addGasStationToFavourites(gasStation: GasStation)
 
-    suspend fun removeGasStationFromFavourites(gasStation: GasStation) =
-        roomService.removeGasStationFromFavourites(gasStation)
+    suspend fun removeGasStationFromFavourites(gasStation: GasStation)
 
-    suspend fun isGasStationFavourite(gasStation: GasStation): Boolean =
-        roomService.isGasStationFavourite(gasStation)
+    suspend fun isGasStationFavourite(gasStation: GasStation): Boolean
 
-    fun getLastLocation(): Task<Location> = geoService.getLastLocation()
+    fun getLastLocation(): Task<Location>
 
-    fun getAdminArea(coordinates: Coordinates): String? = geoService.getAdminArea(coordinates)
-        ?: geoService.getSubAdminArea(coordinates)
+    fun getAdminArea(coordinates: Coordinates): String?
 }

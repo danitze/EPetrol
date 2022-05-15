@@ -18,12 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EPetrol">
         <activity
-            android:name=".activities.GasStationInfoActivity"
+            android:name=".activity.GasStationInfoActivity"
             android:exported="false"
             android:label="@string/title_activity_gas_station_info"
             android:theme="@style/Theme.EPetrol" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.EPetrol">
