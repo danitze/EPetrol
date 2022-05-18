@@ -10,6 +10,7 @@ import com.example.epetrol.service.GasStationInfoService
 import com.example.epetrol.service.RegionGasStationsService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

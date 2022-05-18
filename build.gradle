@@ -4,6 +4,7 @@ buildscript {
     ext.retrofit_version = '2.9.0'
     ext.hilt_version = '2.41'
     ext.room_version = '2.4.2'
+    ext.datastore_version = '1.0.0'
     repositories {
         google()
         mavenCentral()

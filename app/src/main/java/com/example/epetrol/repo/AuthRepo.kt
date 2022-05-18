@@ -1,11 +1,12 @@
 package com.example.epetrol.repo
 
-import com.example.epetrol.result.AuthResult
+import com.example.epetrol.result.SignInResult
+import com.example.epetrol.result.SignUpResult
 
 interface AuthRepo {
-    suspend fun signUp(email: String, password: String, repeatedPassword: String): AuthResult
+    suspend fun signUp(email: String, password: String, confirmPassword: String): SignUpResult
 
-    suspend fun signIn(email: String, password: String): AuthResult
+    suspend fun signIn(email: String, password: String): SignInResult
 
-    suspend fun updateToken(token: String): AuthResult
+    suspend fun updateToken(): SignInResult
 }

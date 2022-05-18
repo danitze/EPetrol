@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.epetrol.screen.MainScreen
 import com.example.epetrol.screen.SignInScreen
+import com.example.epetrol.screen.SignUpScreen
 
 @Composable
 fun MainNavGraph(baseUrl: String) {
@@ -15,7 +16,7 @@ fun MainNavGraph(baseUrl: String) {
             SignInScreen(navController = navController)
         }
         composable(AuthScreen.SignUp.route) {
-            SignUpScreen()
+            SignUpScreen(navController = navController)
         }
         composable(AuthScreen.Main.route) {
             MainScreen(baseUrl = baseUrl)
