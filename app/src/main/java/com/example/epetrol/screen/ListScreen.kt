@@ -24,6 +24,7 @@ import com.example.epetrol.R
 import com.example.epetrol.data.Fuel
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.formPriceText
+import com.example.epetrol.intent.MainIntent
 import com.example.epetrol.toGasStation
 import com.example.epetrol.viewmodel.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -85,7 +86,9 @@ fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainVi
 
                 IconButton(
                     onClick = {
-                        viewModel.changeGasStationFavouriteState(station.toGasStation())
+                        viewModel.onIntent(
+                            MainIntent.ChangeGasStationFavouriteState(station.toGasStation())
+                        )
                     },
                     modifier = Modifier.weight(2f),
                 ) {

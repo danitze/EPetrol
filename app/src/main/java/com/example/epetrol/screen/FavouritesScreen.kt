@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.epetrol.GAS_STATION_ID_KEY
 import com.example.epetrol.R
 import com.example.epetrol.activity.GasStationInfoActivity
+import com.example.epetrol.intent.MainIntent
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.viewmodel.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -120,7 +121,7 @@ fun FavouriteGasStationCard(
 
             IconButton(
                 onClick = {
-                    viewModel.changeGasStationFavouriteState(station)
+                    viewModel.onIntent(MainIntent.ChangeGasStationFavouriteState(station))
                 },
                 modifier = Modifier.weight(2f),
             ) {

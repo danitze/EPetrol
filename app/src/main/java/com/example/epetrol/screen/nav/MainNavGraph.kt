@@ -19,7 +19,7 @@ fun MainNavGraph(baseUrl: String) {
             SignUpScreen(navController = navController)
         }
         composable(AuthScreen.Main.route) {
-            MainScreen(baseUrl = baseUrl)
+            MainScreen(baseUrl = baseUrl, authNavController = navController)
         }
     }
 }

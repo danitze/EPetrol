@@ -4,11 +4,13 @@ import com.example.epetrol.data.SignInRequest
 import com.example.epetrol.data.SignUpRequest
 import com.example.epetrol.getExceptionMessage
 import com.example.epetrol.result.SignInResult
+import com.example.epetrol.result.SignOutResult
 import com.example.epetrol.result.SignUpResult
 import com.example.epetrol.service.AuthService
 import com.example.epetrol.service.TokenStorageService
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
+import java.lang.Exception
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -56,6 +58,15 @@ class AuthRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun signOut(): SignOutResult {
+        return try {
+            tokenStorageService.clearToken()
+            SignOutResult.Unauthorized
+        } catch (e: Exception) {
+            SignOutResult.Error(e.getExceptionMessage())
+        }
+    }
+
     override suspend fun updateToken(): SignInResult {
         return try {
             val token = tokenStorageService.tokensFlow.first()
@@ -65,7 +76,7 @@ class AuthRepoImpl @Inject constructor(
             tokenStorageService.saveToken(tokenResponse.token)
             SignInResult.Authorized
         } catch (e: HttpException) {
-            if(e.code() == 400) {
+            if(e.code() == 403) {
                 SignInResult.Unauthorized
             } else {
                 SignInResult.Error(e.message())
