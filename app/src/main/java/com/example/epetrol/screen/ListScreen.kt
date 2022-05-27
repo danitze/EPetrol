@@ -20,12 +20,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.epetrol.*
 import com.example.epetrol.R
 import com.example.epetrol.data.Fuel
 import com.example.epetrol.data.RegionGasStation
-import com.example.epetrol.formPriceText
 import com.example.epetrol.intent.MainIntent
-import com.example.epetrol.toGasStation
 import com.example.epetrol.viewmodel.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -50,6 +49,8 @@ fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainVi
     val favouriteGasStationsState = viewModel
         .favouriteGasStationsFlow.collectAsState(initial = listOf())
 
+    val tokenState = viewModel.tokensFlow.collectAsState(initial = "")
+
     Surface(
         shape = MaterialTheme.shapes.medium,
         elevation = 1.dp,
@@ -63,7 +64,10 @@ fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainVi
                 modifier = Modifier.height(100.dp)
             ) {
                 GlideImage(
-                    imageModel = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${station.gasStationId}",
+                    imageModel = provideGlideUrl(
+                        url = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${station.gasStationId}",
+                        token = createTokenHeader(tokenState.value)
+                    ),
                     contentDescription = "Logo",
                     contentScale = ContentScale.FillWidth,
                     placeHolder = ImageVector.vectorResource(id = R.drawable.ic_placeholder),

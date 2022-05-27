@@ -1,5 +1,6 @@
 package com.example.epetrol.repo
 
+import com.example.epetrol.createTokenHeader
 import com.example.epetrol.data.SignInRequest
 import com.example.epetrol.data.SignUpRequest
 import com.example.epetrol.getExceptionMessage
@@ -8,6 +9,7 @@ import com.example.epetrol.result.SignOutResult
 import com.example.epetrol.result.SignUpResult
 import com.example.epetrol.service.AuthService
 import com.example.epetrol.service.TokenStorageService
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import java.lang.Exception
@@ -20,6 +22,8 @@ class AuthRepoImpl @Inject constructor(
     private val authService: AuthService,
     private val tokenStorageService: TokenStorageService
 ) : AuthRepo {
+    override val tokensFlow = tokenStorageService.tokensFlow
+
     override suspend fun signUp(
         email: String,
         password: String,
@@ -69,9 +73,9 @@ class AuthRepoImpl @Inject constructor(
 
     override suspend fun updateToken(): SignInResult {
         return try {
-            val token = tokenStorageService.tokensFlow.first()
+            val token = tokenStorageService.getToken()
             val tokenResponse = authService.updateToken(
-                "Bearer $token"
+                createTokenHeader(token)
             )
             tokenStorageService.saveToken(tokenResponse.token)
             SignInResult.Authorized

@@ -3,8 +3,11 @@ package com.example.epetrol.repo
 import com.example.epetrol.result.SignInResult
 import com.example.epetrol.result.SignOutResult
 import com.example.epetrol.result.SignUpResult
+import kotlinx.coroutines.flow.Flow
 
 interface AuthRepo {
+    val tokensFlow: Flow<String>
+
     suspend fun signUp(email: String, password: String, confirmPassword: String): SignUpResult
 
     suspend fun signIn(email: String, password: String): SignInResult

@@ -26,9 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.epetrol.R
 import com.example.epetrol.activity.ui.theme.EPetrolTheme
+import com.example.epetrol.createTokenHeader
 import com.example.epetrol.data.Fuel
 import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.formPriceText
+import com.example.epetrol.provideGlideUrl
 import com.example.epetrol.viewmodel.GasStationInfoViewModel
 import com.skydoves.landscapist.glide.GlideImage
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +45,6 @@ class GasStationInfoActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel
         setContent {
             EPetrolTheme {
                 Surface(
@@ -52,7 +53,7 @@ class GasStationInfoActivity : ComponentActivity() {
                 ) {
                     val gasStationState = viewModel.gasStationInfoFlow.collectAsState()
                     if(gasStationState.value == GasStationInfo()) {
-
+                        //TODO implement loading or empty screen
                     } else {
                         GasStationCard(gasStationInfo = gasStationState.value)
                     }
@@ -66,9 +67,14 @@ class GasStationInfoActivity : ComponentActivity() {
 
         val context = LocalContext.current
 
+        val tokenState = viewModel.tokensFlow.collectAsState(initial = "")
+
         Column(modifier = Modifier.padding(20.dp)) {
             GlideImage(
-                imageModel = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${gasStationInfo.gasStationId}",
+                imageModel = provideGlideUrl(
+                    url = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${gasStationInfo.gasStationId}",
+                    token = createTokenHeader(tokenState.value)
+                ),
                 contentDescription = "Logo",
                 contentScale = ContentScale.FillHeight,
                 placeHolder = ImageVector.vectorResource(id = R.drawable.ic_placeholder),

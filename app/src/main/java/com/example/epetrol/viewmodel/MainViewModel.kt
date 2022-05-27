@@ -5,13 +5,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.data.Coordinates
+import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.intent.MainIntent
 import com.example.epetrol.repo.AppRepo
 import com.example.epetrol.repo.AuthRepo
+import com.example.epetrol.result.ApiResult
 import com.example.epetrol.result.SignOutResult
 import com.example.epetrol.room.GasStation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,13 +30,20 @@ class MainViewModel @Inject constructor(
     }
 
     val gasStationsFlow = adminAreaFlow.filterNotNull().map { adminArea ->
-        appRepo.getGasStations(adminArea).body() ?: listOf()
+        val result = appRepo.getGasStations(adminArea)
+        if(result is ApiResult.Data) {
+            result.data
+        } else {
+            listOf()
+        }
     }
 
     val favouriteGasStationsFlow = appRepo.favouriteGasStationsFlow
 
     private val _signOutResultsFlow = MutableSharedFlow<SignOutResult>(replay = 1)
     val signOutResultsFlow = _signOutResultsFlow.asSharedFlow()
+
+    val tokensFlow = authRepo.tokensFlow
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
