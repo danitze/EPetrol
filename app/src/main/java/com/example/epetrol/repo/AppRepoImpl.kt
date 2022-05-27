@@ -1,15 +1,13 @@
 package com.example.epetrol.repo
 
-import android.location.Location
 import com.example.epetrol.createTokenHeader
-import com.example.epetrol.data.Coordinates
 import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.getExceptionMessage
+import com.example.epetrol.result.AdminAreaResult
 import com.example.epetrol.result.ApiResult
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.service.*
-import com.google.android.gms.tasks.Task
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,17 +42,48 @@ class AppRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun addGasStationToFavourites(gasStation: GasStation) =
-        roomService.addGasStationToFavourites(gasStation)
-
-    override suspend fun removeGasStationFromFavourites(gasStation: GasStation) =
-        roomService.removeGasStationFromFavourites(gasStation)
+    override suspend fun changeGasStationFavouriteState(gasStation: GasStation) {
+        if(isGasStationFavourite(gasStation)) {
+            removeGasStationFromFavourites(gasStation)
+        } else {
+            addGasStationToFavourites(gasStation)
+        }
+    }
 
     override suspend fun isGasStationFavourite(gasStation: GasStation): Boolean =
         roomService.isGasStationFavourite(gasStation)
 
-    override fun getLastLocation(): Task<Location> = geoService.getLastLocation()
+    override suspend fun getAdminArea(): AdminAreaResult {
+        /*try {
+            val locationFlow = MutableSharedFlow<Location?>()
+            geoService.getLastLocation().addOnCompleteListener {
+                if(it.isSuccessful) {
+                    runBlocking {
+                        locationFlow.emit(it.result)
+                    }
+                }
+            }
+            val location = locationFlow.first()
+            location?.let {
+                val coordinates = Coordinates(
+                    it.latitude,
+                    it.longitude
+                )
+                val adminArea =
+                    geoService.getAdminArea(coordinates) ?: geoService.getSubAdminArea(coordinates)
+                    ?: return AdminAreaResult.Null
+                return AdminAreaResult.Success(adminArea)
+            } ?: return AdminAreaResult.Null
+        } catch (e: Exception) {
+            return AdminAreaResult.Error(e.getExceptionMessage())
+        }*/
+        //TODO remove mock
+        return AdminAreaResult.Success("Kharkivs'ka oblast")
+    }
 
-    override fun getAdminArea(coordinates: Coordinates): String? = geoService.getAdminArea(coordinates)
-        ?: geoService.getSubAdminArea(coordinates)
+    private suspend fun addGasStationToFavourites(gasStation: GasStation) =
+        roomService.addGasStationToFavourites(gasStation)
+
+    private suspend fun removeGasStationFromFavourites(gasStation: GasStation) =
+        roomService.removeGasStationFromFavourites(gasStation)
 }

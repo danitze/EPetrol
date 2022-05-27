@@ -24,32 +24,59 @@ import com.example.epetrol.*
 import com.example.epetrol.R
 import com.example.epetrol.data.Fuel
 import com.example.epetrol.data.RegionGasStation
-import com.example.epetrol.intent.MainIntent
+import com.example.epetrol.intent.ListIntent
+import com.example.epetrol.viewmodel.ListScreenViewModel
 import com.example.epetrol.viewmodel.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun ListScreen(baseUrl: String, viewModel: MainViewModel = hiltViewModel()) {
-    val gasStationsState = viewModel.gasStationsFlow.collectAsState(listOf())
-    GasStationsCard(stations = gasStationsState.value, baseUrl = baseUrl, viewModel = viewModel)
+fun ListScreen(
+    baseUrl: String,
+    mainViewModel: MainViewModel,
+    viewModel: ListScreenViewModel = hiltViewModel()
+) {
+    val listScreenState = viewModel.listScreenState
+    if (listScreenState.data.isNotEmpty()) {
+        GasStationsCard(
+            stations = listScreenState.data,
+            mainViewModel = mainViewModel,
+            baseUrl = baseUrl,
+            viewModel = viewModel
+        )
+    }
 }
 
 @Composable
-fun GasStationsCard(stations: List<RegionGasStation>, baseUrl: String, viewModel: MainViewModel) {
+fun GasStationsCard(
+    stations: List<RegionGasStation>,
+    baseUrl: String,
+    mainViewModel: MainViewModel,
+    viewModel: ListScreenViewModel
+) {
     LazyColumn {
         items(stations) { station ->
-            GasStationCard(station = station, baseUrl = baseUrl, viewModel = viewModel)
+            GasStationCard(
+                station = station,
+                mainViewModel = mainViewModel,
+                baseUrl = baseUrl,
+                viewModel = viewModel
+            )
         }
     }
 }
 
 @Composable
-fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainViewModel) {
+fun GasStationCard(
+    station: RegionGasStation,
+    mainViewModel: MainViewModel,
+    baseUrl: String,
+    viewModel: ListScreenViewModel
+) {
 
     val favouriteGasStationsState = viewModel
         .favouriteGasStationsFlow.collectAsState(initial = listOf())
 
-    val tokenState = viewModel.tokensFlow.collectAsState(initial = "")
+    val tokenState = mainViewModel.tokensFlow.collectAsState(initial = "")
 
     Surface(
         shape = MaterialTheme.shapes.medium,
@@ -91,7 +118,7 @@ fun GasStationCard(station: RegionGasStation, baseUrl: String, viewModel: MainVi
                 IconButton(
                     onClick = {
                         viewModel.onIntent(
-                            MainIntent.ChangeGasStationFavouriteState(station.toGasStation())
+                            ListIntent.ChangeGasStationFavouriteState(station.toGasStation())
                         )
                     },
                     modifier = Modifier.weight(2f),

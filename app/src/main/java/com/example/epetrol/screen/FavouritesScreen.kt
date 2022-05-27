@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,18 +28,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.epetrol.GAS_STATION_ID_KEY
 import com.example.epetrol.R
 import com.example.epetrol.activity.GasStationInfoActivity
+import com.example.epetrol.createTokenHeader
+import com.example.epetrol.intent.FavouritesIntent
 import com.example.epetrol.intent.MainIntent
+import com.example.epetrol.provideGlideUrl
 import com.example.epetrol.room.GasStation
+import com.example.epetrol.viewmodel.FavouritesScreenViewModel
 import com.example.epetrol.viewmodel.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun FavouritesScreen(baseUrl: String, viewModel: MainViewModel = hiltViewModel()) {
+fun FavouritesScreen(
+    baseUrl: String,
+    mainViewModel: MainViewModel,
+    viewModel: FavouritesScreenViewModel = hiltViewModel()
+) {
     val favouriteGasStationsState = viewModel.favouriteGasStationsFlow
         .collectAsState(initial = listOf())
-    if(favouriteGasStationsState.value.isNotEmpty()) {
+    if (favouriteGasStationsState.value.isNotEmpty()) {
         FavouriteGasStationsCard(
             baseUrl = baseUrl,
+            mainViewModel = mainViewModel,
             viewModel = viewModel,
             favouriteGasStationsState = favouriteGasStationsState
         )
@@ -52,7 +60,8 @@ fun FavouritesScreen(baseUrl: String, viewModel: MainViewModel = hiltViewModel()
 @Composable
 fun FavouriteGasStationsCard(
     baseUrl: String,
-    viewModel: MainViewModel,
+    mainViewModel: MainViewModel,
+    viewModel: FavouritesScreenViewModel,
     favouriteGasStationsState: State<List<GasStation>>
 ) {
     LazyColumn {
@@ -60,6 +69,7 @@ fun FavouriteGasStationsCard(
             FavouriteGasStationCard(
                 station = station,
                 baseUrl = baseUrl,
+                mainViewModel = mainViewModel,
                 viewModel = viewModel,
                 favouriteGasStationsState = favouriteGasStationsState
             )
@@ -72,11 +82,14 @@ fun FavouriteGasStationsCard(
 fun FavouriteGasStationCard(
     station: GasStation,
     baseUrl: String,
-    viewModel: MainViewModel,
+    mainViewModel: MainViewModel,
+    viewModel: FavouritesScreenViewModel,
     favouriteGasStationsState: State<List<GasStation>>
 ) {
 
     val context = LocalContext.current
+
+    val tokenState = mainViewModel.tokensFlow.collectAsState(initial = "")
 
     Surface(
         shape = MaterialTheme.shapes.medium,
@@ -98,7 +111,10 @@ fun FavouriteGasStationCard(
                 .padding(10.dp)
         ) {
             GlideImage(
-                imageModel = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${station.gasStationId}",
+                imageModel = provideGlideUrl(
+                    url = "${baseUrl}api/v1/fuel-info/logo?gasStationId=${station.gasStationId}",
+                    token = createTokenHeader(tokenState.value)
+                ),
                 contentDescription = "Logo",
                 contentScale = ContentScale.FillWidth,
                 placeHolder = ImageVector.vectorResource(id = R.drawable.ic_placeholder),
@@ -121,7 +137,7 @@ fun FavouriteGasStationCard(
 
             IconButton(
                 onClick = {
-                    viewModel.onIntent(MainIntent.ChangeGasStationFavouriteState(station))
+                    viewModel.onIntent(FavouritesIntent.ChangeGasStationFavouriteState(station))
                 },
                 modifier = Modifier.weight(2f),
             ) {
@@ -138,7 +154,6 @@ fun FavouriteGasStationCard(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EmptyListCard() {
     ConstraintLayout(

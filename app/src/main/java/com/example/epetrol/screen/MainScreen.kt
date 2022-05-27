@@ -30,26 +30,31 @@ import com.example.epetrol.viewmodel.MainViewModel
 fun MainScreen(
     authNavController: NavController,
     baseUrl: String,
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
     Scaffold(
-        topBar = { TopBar(navController = authNavController) },
+        topBar = { TopBar(navController = authNavController, viewModel = viewModel) },
         bottomBar = { BottomBar(navController = navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            BottomNavGraph(navController = navController, baseUrl = baseUrl)
+            BottomNavGraph(
+                navController = navController,
+                baseUrl = baseUrl,
+                mainViewModel = viewModel
+            )
         }
     }
 }
 
 @Composable
-fun TopBar(navController: NavController, viewModel: MainViewModel = hiltViewModel()) {
+fun TopBar(navController: NavController, viewModel: MainViewModel) {
 
     val context = LocalContext.current
 
     LaunchedEffect(viewModel, context) {
         viewModel.signOutResultsFlow.collect { result ->
-            when(result) {
+            when (result) {
                 is SignOutResult.Error -> Toast.makeText(
                     context,
                     result.msg,
