@@ -75,4 +75,8 @@ object AppModule {
     @Provides
     fun provideAuthService(retrofit: Retrofit): AuthService = retrofit
         .create(AuthService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideGson() = Gson()
 }

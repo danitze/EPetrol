@@ -4,6 +4,7 @@ import com.example.epetrol.createTokenHeader
 import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.getExceptionMessage
+import com.example.epetrol.getFormattedDate
 import com.example.epetrol.result.AdminAreaResult
 import com.example.epetrol.result.ApiResult
 import com.example.epetrol.room.GasStation
@@ -17,14 +18,25 @@ class AppRepoImpl @Inject constructor(
     private val gasStationInfoService: GasStationInfoService,
     private val geoService: GeoService,
     private val roomService: RoomService,
-    private val tokenStorageService: TokenStorageService
+    private val tokenStorageService: TokenStorageService,
+    private val gasStationsStorageService: GasStationsStorageService
 ) : AppRepo {
     override val favouriteGasStationsFlow = roomService.favouriteGasStationsFlow
 
     override suspend fun getGasStations(region: String): ApiResult<List<RegionGasStation>> {
         val token = tokenStorageService.getToken()
+        if(gasStationsDateChanged()) {
+            gasStationsStorageService.clearPrefs()
+        }
         return try {
-            val result = gasStationsService.getGasStations(region, createTokenHeader(token))
+            var result = gasStationsStorageService.getRegionGasStations(region)
+            if(result.isEmpty()) {
+                result = gasStationsService.getGasStations(region, createTokenHeader(token))
+                gasStationsStorageService.saveRegionGasStations(region, result)
+                if(gasStationsStorageService.getLastUpdateDate().isBlank()) {
+                    gasStationsStorageService.saveLastUpdateDate()
+                }
+            }
             ApiResult.Data(result)
         } catch (e: Exception) {
             ApiResult.Error(e.getExceptionMessage())
@@ -43,7 +55,7 @@ class AppRepoImpl @Inject constructor(
     }
 
     override suspend fun changeGasStationFavouriteState(gasStation: GasStation) {
-        if(isGasStationFavourite(gasStation)) {
+        if (isGasStationFavourite(gasStation)) {
             removeGasStationFromFavourites(gasStation)
         } else {
             addGasStationToFavourites(gasStation)
@@ -86,4 +98,8 @@ class AppRepoImpl @Inject constructor(
 
     private suspend fun removeGasStationFromFavourites(gasStation: GasStation) =
         roomService.removeGasStationFromFavourites(gasStation)
+
+    private suspend fun gasStationsDateChanged(): Boolean {
+        return getFormattedDate() == gasStationsStorageService.getLastUpdateDate()
+    }
 }
