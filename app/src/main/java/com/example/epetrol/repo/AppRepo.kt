@@ -2,8 +2,8 @@ package com.example.epetrol.repo
 
 import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
-import com.example.epetrol.result.AdminAreaResult
 import com.example.epetrol.result.ApiResult
+import com.example.epetrol.result.NullableResult
 import com.example.epetrol.room.GasStation
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +18,5 @@ interface AppRepo {
 
     suspend fun isGasStationFavourite(gasStation: GasStation): Boolean
 
-    suspend fun getAdminArea(): AdminAreaResult
+    suspend fun getAdminArea(): NullableResult<String>
 }

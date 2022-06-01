@@ -1,6 +1,5 @@
 package com.example.epetrol.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,8 +11,6 @@ import com.example.epetrol.result.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,9 +36,11 @@ class GasStationInfoViewModel @Inject constructor(
         val gasStationId = savedStateHandle.get<String>(GAS_STATION_ID_KEY) ?: return
 
         viewModelScope.launch {
-            val result = appRepo.getGasStationInfo(gasStationId)
-            _gasStationInfoFlow.value =
-                if (result is ApiResult.Data) result.data else GasStationInfo()
+            appRepo.getGasStationInfo(gasStationId).onData { gasStationInfo ->
+                _gasStationInfoFlow.value = gasStationInfo
+            }.onError {
+                _gasStationInfoFlow.value = GasStationInfo()
+            }
         }
     }
 

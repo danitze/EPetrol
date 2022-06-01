@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.intent.ListIntent
 import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.result.AdminAreaResult
-import com.example.epetrol.result.ApiResult
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.state.ListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,29 +38,21 @@ class ListScreenViewModel @Inject constructor(
     }
 
     private fun reload() = viewModelScope.launch {
-        val result = withContext(Dispatchers.Default) {
-            appRepo.getAdminArea()
-        }
-        when(result) {
-            is AdminAreaResult.Success -> {
-                val gasStationsResult = appRepo.getGasStations(result.adminArea)
-                listScreenState = when(gasStationsResult) {
-                    is ApiResult.Data -> {
-                        listScreenState.copy(
-                            data = gasStationsResult.data,
-                            error = null
-                        )
-                    }
-                    is ApiResult.Error -> {
-                        listScreenState.copy(error = gasStationsResult.msg)
-                    }
+        withContext(Dispatchers.Default) { appRepo.getAdminArea() }
+            .onAsyncData { adminArea ->
+                appRepo.getGasStations(adminArea).onData { regionGasStations ->
+                    listScreenState = listScreenState.copy(
+                        data = regionGasStations,
+                        error = null
+                    )
+                }.onError { msg ->
+                    listScreenState = listScreenState.copy(error = msg)
                 }
+            }.onError { msg ->
+                listScreenState = listScreenState.copy(error = msg)
+            }.onNull {
+
             }
-            is AdminAreaResult.Null -> {}
-            is AdminAreaResult.Error -> {
-                listScreenState = listScreenState.copy(error = result.msg)
-            }
-        }
     }
 
     private fun changeGasStationFavouriteState(gasStation: GasStation) = viewModelScope.launch {

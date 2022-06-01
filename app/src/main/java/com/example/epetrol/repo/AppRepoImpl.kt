@@ -5,8 +5,8 @@ import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.getExceptionMessage
 import com.example.epetrol.getFormattedDate
-import com.example.epetrol.result.AdminAreaResult
 import com.example.epetrol.result.ApiResult
+import com.example.epetrol.result.NullableResult
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.service.*
 import javax.inject.Inject
@@ -65,7 +65,7 @@ class AppRepoImpl @Inject constructor(
     override suspend fun isGasStationFavourite(gasStation: GasStation): Boolean =
         roomService.isGasStationFavourite(gasStation)
 
-    override suspend fun getAdminArea(): AdminAreaResult {
+    override suspend fun getAdminArea(): NullableResult<String> {
         /*try {
             val locationFlow = MutableSharedFlow<Location?>()
             geoService.getLastLocation().addOnCompleteListener {
@@ -90,7 +90,7 @@ class AppRepoImpl @Inject constructor(
             return AdminAreaResult.Error(e.getExceptionMessage())
         }*/
         //TODO remove mock
-        return AdminAreaResult.Success("Kharkivs'ka oblast")
+        return NullableResult.Data("Kharkivs'ka oblast")
     }
 
     private suspend fun addGasStationToFavourites(gasStation: GasStation) =
