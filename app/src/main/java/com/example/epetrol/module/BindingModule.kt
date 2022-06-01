@@ -1,9 +1,6 @@
 package com.example.epetrol.module
 
-import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.repo.AppRepoImpl
-import com.example.epetrol.repo.AuthRepo
-import com.example.epetrol.repo.AuthRepoImpl
+import com.example.epetrol.repo.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,4 +14,7 @@ abstract class BindingModule {
 
     @Binds
     abstract fun bindAuthRepo(authRepoImpl: AuthRepoImpl): AuthRepo
+
+    @Binds
+    abstract fun bindMapRepo(mapRepoImpl: MapRepoImpl): MapRepo
 }

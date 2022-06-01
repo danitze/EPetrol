@@ -1,5 +1,6 @@
 package com.example.epetrol.repo
 
+import android.location.Location
 import com.example.epetrol.createTokenHeader
 import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
@@ -9,6 +10,11 @@ import com.example.epetrol.result.ApiResult
 import com.example.epetrol.result.NullableResult
 import com.example.epetrol.room.GasStation
 import com.example.epetrol.service.*
+import com.example.epetrol.toLatLng
+import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,32 +71,41 @@ class AppRepoImpl @Inject constructor(
     override suspend fun isGasStationFavourite(gasStation: GasStation): Boolean =
         roomService.isGasStationFavourite(gasStation)
 
-    override suspend fun getAdminArea(): NullableResult<String> {
-        /*try {
-            val locationFlow = MutableSharedFlow<Location?>()
-            geoService.getLastLocation().addOnCompleteListener {
-                if(it.isSuccessful) {
-                    runBlocking {
-                        locationFlow.emit(it.result)
-                    }
-                }
-            }
-            val location = locationFlow.first()
-            location?.let {
-                val coordinates = Coordinates(
-                    it.latitude,
-                    it.longitude
-                )
-                val adminArea =
-                    geoService.getAdminArea(coordinates) ?: geoService.getSubAdminArea(coordinates)
-                    ?: return AdminAreaResult.Null
-                return AdminAreaResult.Success(adminArea)
-            } ?: return AdminAreaResult.Null
+    override suspend fun getCoordinates(): NullableResult<LatLng> {
+        /*return try {
+            getCurrentCoordinates()?.let { NullableResult.Data(it) } ?: NullableResult.Null()
         } catch (e: Exception) {
-            return AdminAreaResult.Error(e.getExceptionMessage())
+            NullableResult.Error(e.getExceptionMessage())
         }*/
         //TODO remove mock
+        return NullableResult.Data(LatLng(50.45, 30.52))
+    }
+
+    override suspend fun getAdminArea(): NullableResult<String> {
+        //TODO remove mock
+        /*return try {
+            getCurrentCoordinates()?.let { coordinates ->
+                val adminArea = geoService.getAdminArea(coordinates)
+                    ?: geoService.getSubAdminArea(coordinates)
+                    ?: return@let NullableResult.Null()
+                NullableResult.Data(adminArea)
+            } ?: NullableResult.Null()
+        } catch (e: Exception) {
+            NullableResult.Error(e.getExceptionMessage())
+        }*/
         return NullableResult.Data("Kharkivs'ka oblast")
+    }
+
+    override suspend fun getAdminArea(coordinates: LatLng): NullableResult<String> {
+        try {
+            val adminArea =
+                geoService.getAdminArea(coordinates)
+                    ?: geoService.getSubAdminArea(coordinates)
+                    ?: return NullableResult.Null()
+            return NullableResult.Data(adminArea)
+        } catch (e: Exception) {
+            return NullableResult.Error(e.getExceptionMessage())
+        }
     }
 
     private suspend fun addGasStationToFavourites(gasStation: GasStation) =
@@ -101,5 +116,17 @@ class AppRepoImpl @Inject constructor(
 
     private suspend fun gasStationsDateChanged(): Boolean {
         return getFormattedDate() == gasStationsStorageService.getLastUpdateDate()
+    }
+
+    private suspend fun getCurrentCoordinates(): LatLng? {
+        val locationFlow = MutableSharedFlow<Location?>()
+        geoService.getLastLocation().addOnCompleteListener {
+            if(it.isSuccessful) {
+                runBlocking {
+                    locationFlow.emit(it.result)
+                }
+            }
+        }
+        return locationFlow.first()?.toLatLng()
     }
 }

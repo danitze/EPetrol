@@ -5,6 +5,7 @@ import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.result.ApiResult
 import com.example.epetrol.result.NullableResult
 import com.example.epetrol.room.GasStation
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepo {
@@ -18,5 +19,9 @@ interface AppRepo {
 
     suspend fun isGasStationFavourite(gasStation: GasStation): Boolean
 
+    suspend fun getCoordinates(): NullableResult<LatLng>
+
     suspend fun getAdminArea(): NullableResult<String>
+
+    suspend fun getAdminArea(coordinates: LatLng): NullableResult<String>
 }
