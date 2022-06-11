@@ -25,25 +25,4 @@ sealed class NullableResult<T> {
         }
         return this
     }
-
-    suspend inline fun onAsyncData(block: suspend (data: T) -> Unit): NullableResult<T> {
-        if(this is Data) {
-            block.invoke(this.data)
-        }
-        return this
-    }
-
-    suspend inline fun onAsyncError(block: suspend (msg: String) -> Unit): NullableResult<T> {
-        if(this is Error) {
-            block.invoke(this.msg)
-        }
-        return this
-    }
-
-    suspend inline fun onAsyncNull(block: suspend () -> Unit): NullableResult<T> {
-        if(this is Null) {
-            block.invoke()
-        }
-        return this
-    }
 }

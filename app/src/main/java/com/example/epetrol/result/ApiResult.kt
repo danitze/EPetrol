@@ -17,18 +17,4 @@ sealed class ApiResult<T> {
         }
         return this
     }
-
-    suspend inline fun onAsyncData(block: suspend (data: T) -> Unit): ApiResult<T> {
-        if(this is Data) {
-            block.invoke(this.data)
-        }
-        return this
-    }
-
-    suspend inline fun onAsyncError(block: suspend (msg: String) -> Unit): ApiResult<T> {
-        if(this is Error) {
-            block.invoke(this.msg)
-        }
-        return this
-    }
 }

@@ -39,7 +39,7 @@ class ListScreenViewModel @Inject constructor(
 
     private fun reload() = viewModelScope.launch {
         withContext(Dispatchers.Default) { appRepo.getAdminArea() }
-            .onAsyncData { adminArea ->
+            .onData { adminArea ->
                 appRepo.getGasStations(adminArea).onData { regionGasStations ->
                     listScreenState = listScreenState.copy(
                         data = regionGasStations,

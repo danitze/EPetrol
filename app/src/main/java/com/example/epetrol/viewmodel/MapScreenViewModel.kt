@@ -45,7 +45,7 @@ class MapScreenViewModel @Inject constructor(
     private fun updateCoordinates() = viewModelScope.launch {
         withContext(Dispatchers.Default) {
             appRepo.getCoordinates()
-        }.onAsyncData { coordinates ->
+        }.onData { coordinates ->
             coordinatesStateFlow.emit(coordinates)
         }.onNull {
             mapScreenState = mapScreenState.copy(error = "Cannot find coordinates")
@@ -57,9 +57,9 @@ class MapScreenViewModel @Inject constructor(
     private suspend fun fetchNearestGasStations(coordinates: LatLng) {
         withContext(Dispatchers.Default) {
             appRepo.getAdminArea(coordinates)
-        }.onAsyncData { adminArea ->
+        }.onData { adminArea ->
             val markers = mutableListOf<GasStationMarker>()
-            appRepo.getGasStations(adminArea).onAsyncData { gasStations ->
+            appRepo.getGasStations(adminArea).onData { gasStations ->
                 gasStations.forEach { gasStation ->
                     withContext(Dispatchers.Default) {
                         mapRepo.getNearestGasStations(
