@@ -1,4 +1,4 @@
-package com.example.epetrol.repo
+package com.example.epetrol.repo.implementation
 
 import android.location.Location
 import com.example.epetrol.createTokenHeader
@@ -6,10 +6,11 @@ import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.getExceptionMessage
 import com.example.epetrol.getFormattedDate
+import com.example.epetrol.repo.abstraction.AppRepo
 import com.example.epetrol.result.ApiResult
 import com.example.epetrol.result.NullableResult
-import com.example.epetrol.room.GasStation
-import com.example.epetrol.service.*
+import com.example.epetrol.data.GasStation
+import com.example.epetrol.service.abstraction.*
 import com.example.epetrol.toLatLng
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,11 +24,11 @@ class AppRepoImpl @Inject constructor(
     private val gasStationsService: RegionGasStationsService,
     private val gasStationInfoService: GasStationInfoService,
     private val geoService: GeoService,
-    private val roomService: RoomService,
+    private val favouriteGasStationsService: FavouriteGasStationsService,
     private val tokenStorageService: TokenStorageService,
     private val gasStationsStorageService: GasStationsStorageService
 ) : AppRepo {
-    override val favouriteGasStationsFlow = roomService.favouriteGasStationsFlow
+    override val favouriteGasStationsFlow = favouriteGasStationsService.favouriteGasStationsFlow
 
     override suspend fun getGasStations(region: String): ApiResult<List<RegionGasStation>> {
         val token = tokenStorageService.getToken()
@@ -69,7 +70,7 @@ class AppRepoImpl @Inject constructor(
     }
 
     override suspend fun isGasStationFavourite(gasStation: GasStation): Boolean =
-        roomService.isGasStationFavourite(gasStation)
+        favouriteGasStationsService.isGasStationFavourite(gasStation)
 
     override suspend fun getCoordinates(): NullableResult<LatLng> {
         /*return try {
@@ -109,10 +110,10 @@ class AppRepoImpl @Inject constructor(
     }
 
     private suspend fun addGasStationToFavourites(gasStation: GasStation) =
-        roomService.addGasStationToFavourites(gasStation)
+        favouriteGasStationsService.addGasStationToFavourites(gasStation)
 
     private suspend fun removeGasStationFromFavourites(gasStation: GasStation) =
-        roomService.removeGasStationFromFavourites(gasStation)
+        favouriteGasStationsService.removeGasStationFromFavourites(gasStation)
 
     private suspend fun gasStationsDateChanged(): Boolean {
         return getFormattedDate() == gasStationsStorageService.getLastUpdateDate()

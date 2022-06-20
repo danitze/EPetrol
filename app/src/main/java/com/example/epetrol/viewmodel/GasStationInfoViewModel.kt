@@ -5,9 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.GAS_STATION_ID_KEY
 import com.example.epetrol.data.GasStationInfo
-import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.repo.AuthRepo
-import com.example.epetrol.result.ApiResult
+import com.example.epetrol.repo.abstraction.AppRepo
+import com.example.epetrol.repo.abstraction.AuthRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

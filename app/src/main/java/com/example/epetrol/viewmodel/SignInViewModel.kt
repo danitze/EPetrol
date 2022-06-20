@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.intent.SignInIntent
-import com.example.epetrol.repo.AuthRepo
+import com.example.epetrol.repo.abstraction.AuthRepo
 import com.example.epetrol.result.SignInResult
 import com.example.epetrol.state.SignInState
 import dagger.hilt.android.lifecycle.HiltViewModel

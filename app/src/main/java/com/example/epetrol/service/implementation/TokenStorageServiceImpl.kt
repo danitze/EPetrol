@@ -1,4 +1,4 @@
-package com.example.epetrol.service
+package com.example.epetrol.service.implementation
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.epetrol.TOKEN_DATASTORE
+import com.example.epetrol.service.abstraction.TokenStorageService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -15,30 +16,30 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TokenStorageService @Inject constructor(
+class TokenStorageServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): TokenStorageService {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
         name = TOKEN_DATASTORE
     )
 
-    val tokensFlow: Flow<String> = context.dataStore.data.map { prefs ->
+    override val tokensFlow: Flow<String> = context.dataStore.data.map { prefs ->
         prefs[TOKEN_KEY] ?: ""
     }
 
-    suspend fun saveToken(userToken: String) {
+    override suspend fun saveToken(userToken: String) {
         context.dataStore.edit { prefs ->
             prefs[TOKEN_KEY] = userToken
         }
     }
 
-    suspend fun clearToken() {
+    override suspend fun clearToken() {
         context.dataStore.edit { prefs ->
             prefs.remove(TOKEN_KEY)
         }
     }
 
-    suspend fun getToken(): String = tokensFlow.first()
+    override suspend fun getToken(): String = tokensFlow.first()
 
     companion object {
         val TOKEN_KEY = stringPreferencesKey(name = "user_token")

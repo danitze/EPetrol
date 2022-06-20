@@ -1,4 +1,4 @@
-package com.example.epetrol.service
+package com.example.epetrol.service.abstraction
 
 import com.example.epetrol.data.SignInRequest
 import com.example.epetrol.data.SignUpRequest

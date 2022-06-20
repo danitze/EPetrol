@@ -1,16 +1,15 @@
-package com.example.epetrol.repo
+package com.example.epetrol.repo.implementation
 
 import com.example.epetrol.createTokenHeader
 import com.example.epetrol.data.SignInRequest
 import com.example.epetrol.data.SignUpRequest
 import com.example.epetrol.getExceptionMessage
+import com.example.epetrol.repo.abstraction.AuthRepo
 import com.example.epetrol.result.SignInResult
 import com.example.epetrol.result.SignOutResult
 import com.example.epetrol.result.SignUpResult
-import com.example.epetrol.service.AuthService
-import com.example.epetrol.service.TokenStorageService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import com.example.epetrol.service.abstraction.AuthService
+import com.example.epetrol.service.abstraction.TokenStorageService
 import retrofit2.HttpException
 import java.lang.Exception
 import java.net.SocketTimeoutException

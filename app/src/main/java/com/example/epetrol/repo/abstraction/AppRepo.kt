@@ -1,10 +1,10 @@
-package com.example.epetrol.repo
+package com.example.epetrol.repo.abstraction
 
 import com.example.epetrol.data.GasStationInfo
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.result.ApiResult
 import com.example.epetrol.result.NullableResult
-import com.example.epetrol.room.GasStation
+import com.example.epetrol.data.GasStation
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 

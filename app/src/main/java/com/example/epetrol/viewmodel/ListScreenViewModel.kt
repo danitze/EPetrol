@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.intent.ListIntent
-import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.room.GasStation
+import com.example.epetrol.repo.abstraction.AppRepo
+import com.example.epetrol.data.GasStation
 import com.example.epetrol.state.ListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

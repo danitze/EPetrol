@@ -1,9 +1,10 @@
-package com.example.epetrol.service
+package com.example.epetrol.service.implementation
 
 import android.annotation.SuppressLint
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import com.example.epetrol.service.abstraction.GeoService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
@@ -12,22 +13,22 @@ import javax.inject.Singleton
 
 @SuppressLint("MissingPermission")
 @Singleton
-class GeoService @Inject constructor(
+class GeoServiceImpl @Inject constructor(
     private val fusedLocationClient: FusedLocationProviderClient,
     private val geoCoder: Geocoder
-) {
+): GeoService {
 
-    fun getLastLocation(): Task<Location> = fusedLocationClient.lastLocation
+    override fun getLastLocation(): Task<Location> = fusedLocationClient.lastLocation
 
-    fun getAdminArea(coordinates: LatLng): String? = geoCoder
+    override fun getAdminArea(coordinates: LatLng): String? = geoCoder
         .getFromLocation(coordinates.latitude, coordinates.longitude, 1)[0]
         .adminArea
 
-    fun getSubAdminArea(coordinates: LatLng): String? = geoCoder
+    override fun getSubAdminArea(coordinates: LatLng): String? = geoCoder
         .getFromLocation(coordinates.latitude, coordinates.longitude, 1)[0]
         .subAdminArea
 
-    fun getNearestGasStations(
+    override fun getNearestGasStations(
         gasStationName: String,
         maxResults: Int,
         coordinates: LatLng,

@@ -1,4 +1,4 @@
-package com.example.epetrol.service
+package com.example.epetrol.service.implementation
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.epetrol.REGION_GAS_STATIONS_DATASTORE
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.getFormattedDate
+import com.example.epetrol.service.abstraction.GasStationsStorageService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,41 +19,41 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GasStationsStorageService @Inject constructor(
+class GasStationsStorageServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val gson: Gson
-) {
+): GasStationsStorageService {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
         name = REGION_GAS_STATIONS_DATASTORE
     )
 
-    suspend fun saveRegionGasStations(key: String, regionGasStations: List<RegionGasStation>) {
+    override suspend fun saveRegionGasStations(key: String, regionGasStations: List<RegionGasStation>) {
         context.dataStore.edit { prefs ->
             prefs[stringPreferencesKey(key)] = gson.toJson(regionGasStations)
         }
         saveKey(key)
     }
 
-    suspend fun getRegionGasStations(key: String): List<RegionGasStation> =
+    override suspend fun getRegionGasStations(key: String): List<RegionGasStation> =
         context.dataStore.data.map { prefs ->
             val jsonString =
                 prefs[stringPreferencesKey(key)] ?: return@map listOf<RegionGasStation>()
             gson.fromJson(jsonString, object : TypeToken<List<RegionGasStation>>() {}.type)
         }.firstOrNull() ?: listOf()
 
-    suspend fun saveLastUpdateDate() {
+    override suspend fun saveLastUpdateDate() {
         val date = getFormattedDate()
         context.dataStore.edit { prefs ->
             prefs[LAST_UPDATED_KEY] = date
         }
     }
 
-    suspend fun getLastUpdateDate(): String = context.dataStore.data.map { prefs ->
+    override suspend fun getLastUpdateDate(): String = context.dataStore.data.map { prefs ->
         prefs[LAST_UPDATED_KEY] ?: ""
     }.firstOrNull() ?: ""
 
-    suspend fun clearPrefs() {
+    override suspend fun clearPrefs() {
         context.dataStore.edit { prefs ->
             getRegionsKeys().forEach { regionKey ->
                 prefs.remove(stringPreferencesKey(regionKey))

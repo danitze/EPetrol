@@ -1,4 +1,4 @@
-package com.example.epetrol.service
+package com.example.epetrol.service.abstraction
 
 import com.example.epetrol.data.RegionGasStation
 import retrofit2.Response

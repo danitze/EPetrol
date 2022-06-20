@@ -1,10 +1,11 @@
-package com.example.epetrol.repo
+package com.example.epetrol.repo.implementation
 
 import com.example.epetrol.data.GasStationMarker
 import com.example.epetrol.data.RegionGasStation
 import com.example.epetrol.getExceptionMessage
+import com.example.epetrol.repo.abstraction.MapRepo
 import com.example.epetrol.result.NullableResult
-import com.example.epetrol.service.GeoService
+import com.example.epetrol.service.abstraction.GeoService
 import com.example.epetrol.toLatLng
 import com.google.android.gms.maps.model.LatLng
 import javax.inject.Inject

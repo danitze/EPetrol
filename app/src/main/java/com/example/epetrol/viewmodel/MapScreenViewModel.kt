@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.epetrol.MAP_STATIONS_RADIUS
 import com.example.epetrol.MAX_MAP_STATIONS_RESULT
 import com.example.epetrol.data.GasStationMarker
-import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.repo.MapRepo
+import com.example.epetrol.repo.abstraction.AppRepo
+import com.example.epetrol.repo.abstraction.MapRepo
 import com.example.epetrol.state.MapScreenState
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel

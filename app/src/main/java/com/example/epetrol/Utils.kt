@@ -5,7 +5,7 @@ import android.location.Location
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.example.epetrol.data.RegionGasStation
-import com.example.epetrol.room.GasStation
+import com.example.epetrol.data.GasStation
 import com.google.android.gms.maps.model.LatLng
 import java.util.*
 

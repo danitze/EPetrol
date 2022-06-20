@@ -1,4 +1,4 @@
-package com.example.epetrol.repo
+package com.example.epetrol.repo.abstraction
 
 import com.example.epetrol.data.GasStationMarker
 import com.example.epetrol.data.RegionGasStation

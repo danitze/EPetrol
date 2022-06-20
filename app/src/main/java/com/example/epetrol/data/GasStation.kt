@@ -1,4 +1,4 @@
-package com.example.epetrol.room
+package com.example.epetrol.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

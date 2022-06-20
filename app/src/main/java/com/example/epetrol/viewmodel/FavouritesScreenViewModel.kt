@@ -3,8 +3,8 @@ package com.example.epetrol.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.intent.FavouritesIntent
-import com.example.epetrol.repo.AppRepo
-import com.example.epetrol.room.GasStation
+import com.example.epetrol.repo.abstraction.AppRepo
+import com.example.epetrol.data.GasStation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

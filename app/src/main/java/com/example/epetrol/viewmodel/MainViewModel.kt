@@ -3,7 +3,7 @@ package com.example.epetrol.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epetrol.intent.MainIntent
-import com.example.epetrol.repo.AuthRepo
+import com.example.epetrol.repo.abstraction.AuthRepo
 import com.example.epetrol.result.SignOutResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

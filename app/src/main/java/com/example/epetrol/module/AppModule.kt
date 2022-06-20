@@ -5,9 +5,9 @@ import android.location.Geocoder
 import androidx.room.Room
 import com.example.epetrol.room.FavouriteGasStationsDao
 import com.example.epetrol.room.FavouriteGasStationsDb
-import com.example.epetrol.service.AuthService
-import com.example.epetrol.service.GasStationInfoService
-import com.example.epetrol.service.RegionGasStationsService
+import com.example.epetrol.service.abstraction.AuthService
+import com.example.epetrol.service.abstraction.GasStationInfoService
+import com.example.epetrol.service.abstraction.RegionGasStationsService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson

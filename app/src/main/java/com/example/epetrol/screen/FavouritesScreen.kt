@@ -30,9 +30,8 @@ import com.example.epetrol.R
 import com.example.epetrol.activity.GasStationInfoActivity
 import com.example.epetrol.createTokenHeader
 import com.example.epetrol.intent.FavouritesIntent
-import com.example.epetrol.intent.MainIntent
 import com.example.epetrol.provideGlideUrl
-import com.example.epetrol.room.GasStation
+import com.example.epetrol.data.GasStation
 import com.example.epetrol.viewmodel.FavouritesScreenViewModel
 import com.example.epetrol.viewmodel.MainViewModel
 import com.skydoves.landscapist.glide.GlideImage
